@@ -596,7 +596,14 @@ def main() -> None:
         level=logging.INFO,
     )
 
-    token = os.getenv("BOT_TOKEN") or os.getenv("TELEGRAM_BOT_TOKEN")
+    # Railway設定ミスを吸収するため、よくある誤記 BOI_TOKEN も許容する
+    token = (
+        os.getenv("BOT_TOKEN")
+        or os.getenv("TELEGRAM_BOT_TOKEN")
+        or os.getenv("BOI_TOKEN")
+    )
+    if token:
+        token = token.strip()
     if not token:
         raise RuntimeError(
             "BOT_TOKEN (または TELEGRAM_BOT_TOKEN) が未設定です。"
